@@ -1,4 +1,4 @@
 # sysintg-mp
-Richard Parayno - Leader
-Kurt Ebol
-Karl Malabuyo
+Richard Parayno - Leader <br />
+Kurt Ebol <br />
+Karl Malabuyo <br />
