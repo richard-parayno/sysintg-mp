@@ -30,29 +30,31 @@
                  if($row['password'] != $_POST['password']) {
                      $invalid = 1;   
                  }
-                 else  header("Location: http://".$_SERVER['HTTP_HOST'].  dirname($_SERVER['PHP_SELF'])."/index.php");
+                 else {
+                     $_SESSION['username'] = $_POST['username'];
+                     header("Location: http://".$_SERVER['HTTP_HOST'].  dirname($_SERVER['PHP_SELF'])."/index.php");
+                 }
              }
          }
     }
 ?>
 <html>
+    <head>
 
-<head>
-
-</head>
-
-<body>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-        <input type="text" name="username" placeholder="Username" value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>">
-        <input type="password" name="password" placeholder="Password">
-        <?php 
-            if (isset($message)){
-                echo $message;
-            }
-        ?>
-        <br>
-        <button type="submit" name="submit">Sign in</button>
-    </form>
-</body>
+    </head>
+    <body>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <input type="text" name="username" placeholder="Username" value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>">
+            <input type="password" name="password" placeholder="Password">
+            <font color="red"><?php 
+                if (isset($message)){
+                    echo $message;
+                }
+                ?>
+            </font>
+            <br>
+            <button type="submit" name="submit">Sign in</button>
+        </form>
+    </body>
 
 </html>
