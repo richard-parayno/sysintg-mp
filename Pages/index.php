@@ -1,17 +1,14 @@
 <html>
     <head>
-        <script src="http://www.google.com/jsapi" type="text/javascript"></script>
-        <script type="text/javascript">
-            google.load("jquery", "1.3.2");
-        </script>
         <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script src="../plugins/angular/angular.js"></script>
         <script src="../plugins/angular/sampleapp.js"></script>
-        <script src="../plugins/angular/complexcontroller.js"></script>
     </head>
-    <body ng-app="sampleapp" ng-controller="MainController">
-        <label>University:</label>
-        <select ng-model="univswitch" ng-init="<?php
+    <body ng-app="sampleapp" ng-controller="MainController" ng-init="<?php
+                            
                             require_once('../mysql_connect.php');
                             $query = "SELECT *, DATEDIFF(CURDATE(), birthday)DIV 365 AS age 
                                         FROM univdata;";
@@ -27,11 +24,11 @@
                                         echo "university:'{$row['university']}', ";
                                         echo "age:'{$row['age']}'}";
                                         if($ctr <= mysqli_num_rows($result) - 1) echo ", ";
-                                        else echo "], ";
+                                        else echo "]; ";
                                         $ctr++;
                                  }
-                            }
-                            
+                            };                      
+                                                                     
                             require_once('../mysql_connect.php');
                             $query = "SELECT university, COUNT(university) as UNIVCOUNT
                                         FROM univdata
@@ -39,26 +36,24 @@
                             $result = mysqli_query($dbc,$query);
                             $ctr = 1;
                             if($result){
-                                 echo '
-                                        univCount=[';
+                                 echo ' univCount=[';
                                  while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                                     echo "{$row['UNIVCOUNT']}";
                                     if($ctr <= mysqli_num_rows($result) - 1) echo ", ";
-                                    else echo "], ";
+                                    else echo "]; ";
                                     $ctr++;
                                  }
-                            }
-                                               
+                            };
+                            
                             require_once('../mysql_connect.php');
                             $query = "SELECT COUNT(university) as UNIVCOUNT
                                         FROM univdata;";
                             $result = mysqli_query($dbc,$query);
                             if($result){
                                  while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-                                    echo "
-                                        totalCount={$row['UNIVCOUNT']}, ";
+                                    echo " totalCount={$row['UNIVCOUNT']}; ";
                                  }
-                            }
+                            };
                                                
                             require_once('../mysql_connect.php');
                             $query = "SELECT DATEDIFF(CURDATE(), birthday)DIV 365 AS AGE
@@ -67,31 +62,66 @@
                             $result = mysqli_query($dbc,$query);
                             $ctr = 1;
                             if($result){
-                                 echo '
-                                        ageArray=[';
+                                 echo ' ageArray=[';
                                  while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                                     echo "{$row['AGE']}";
                                     if($ctr <= mysqli_num_rows($result) - 1) echo ", ";
-                                    else echo "]";
+                                    else echo "];";
                                     $ctr++;
                                  }
-                            }              
+                            };
                          ?>">
-            <option value="all">All</option>
-            <option value="0">ADMU</option>
-            <option value="1">DLSU</option>
-            <option value="2">LPU</option>
-            <option value="3">MIT</option>
-            <option value="4">STI</option>
-            <option value="5">UP</option>
-            <option value="6">UST</option>
-        </select>
+        <label>University/ies:</label>
+            <div>
+            <form>
+                <input name="univ" type="radio" value="all" ng-model="showUniv" checked>All (Total Students: <font color="red"><b>{{totalCount}}</b></font>)
+                <input name="univ" type="radio" value="multi" ng-model="showUniv">Select University
+            </form>
+            </div>
+            <div ng-show="showUniv == 'multi'" >
+            <form>
+                <label ng-repeat="univ in universities">
+                    <input type="checkbox" name="selectedUnivs[]" value="{{univ}}" ng-click="toggleSelection(univ)"> {{univ}}
+                </label>
+                <br><br>
+            </form>
+            </div>
         <label>Age: </label>
         <select name="age">
-            <option ng-repeat="x in ageArray">{{x}}</option>
-        </select><br>
-        Total Students: {{totalCount}}
-        Total Students in University: {{univcount[{{univswitch}}]}}
-        <input type="checkbox">
+            <option value="0">--</option>
+            <option value="{{x}}" ng-repeat="x in ageArray">{{x}}</option>
+        </select><br><br>
+        <div>
+            <table id="univtable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Birthday</th>
+                    <th>Age</th>
+                    <th>University</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in students | filter : {'university' : {'LPU', 'DLSU'}}">
+                        <td>{{x.lastName}}</td>
+                        <td>{{x.firstName}}</td>
+                        <td>{{x.birthday}}</td>
+                        <td>{{x.age}}</td>
+                        <td>{{x.university}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Birthday</th>
+                    <th>Age</th>
+                    <th>University</th>
+                </tfoot>
+            </table>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#univtable').DataTable();
+            } );
+        </script>
     </body>
 </html>
