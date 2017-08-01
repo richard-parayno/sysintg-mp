@@ -2,7 +2,6 @@
     session_start();
     require_once('../mysql_connect.php');
     $_SESSION['username'] = null;
-    echo $_POST['username'];
 
     if (isset($_POST['submit'])){
 

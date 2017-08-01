@@ -61,7 +61,7 @@
         $result = mysqli_query($dbc,$query);
         $ctr = 1;
         if($result){
-             echo ' ageArray=[';
+             echo ' ageArrayF=[';
              while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                 echo "{$row['AGE']}";
                 if($ctr <= mysqli_num_rows($result) - 1) echo ", ";
@@ -82,27 +82,25 @@
                 <label ng-repeat="univ in universities">
                     <input type="checkbox" name="selectedUnivs[]" value="{{univ}}" ng-click="toggleSelection(univ)"> {{univ}} <font color="red"><b>({{univCount[$index]}})</b></font>
                 </label>
-                <br>
-                <br>
             </form>
         </div>
-        <label>Age: </label>
-        <select name="age" id="ageSelect">
-            <option value="0">--</option>
-            <option value="{{x}}" ng-repeat="x in ageArray">{{x}}</option>
-        </select>
-        <button ng-click="sortByLastName()">Sort by Last Name</button>
-        <button ng-click="refreshArray()">Group By Age</button>
-        <br>
-        <br>
         <div>
             <table id="univtable" class="display" border="2" cellspacing="0" width="100%" margin>
                 <thead>
-                    <th width="25%">Last Name</th>
-                    <th width="25%">First Name</th>
-                    <th width="20%">Birthday</th>
-                    <th width="10%">Age</th>
-                    <th width="20%">University</th>
+                    <th width="25%" ng-click="sortByLastName()">Last Name</th>
+                    <th width="25%" ng-click="sortByFirstName()">First Name</th>
+                    <th width="13%">Birthday</th>
+                    <th width="20%" ng-click="refreshAgeT()">
+                        <label>Age Range: </label>
+                        <select name="ageFrom" id="ageSelectF">
+                            <option value="0">--</option>
+                            <option value="{{x}}" ng-repeat="x in ageArrayF">{{x}}</option>
+                        </select> To 
+                        <select name="ageTo" id="ageSelectT">
+                            <option value="0">--</option>
+                            <option value="{{x}}" ng-repeat="x in ageArrayT">{{x}}</option>
+                        </select>&nbsp;&nbsp;&nbsp;<button ng-click="refreshArray()">Sort</button></th>
+                    <th width="17%">University</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="x in studentsSubset">
