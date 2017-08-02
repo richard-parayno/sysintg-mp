@@ -47,7 +47,9 @@
             <input type="password" name="password" placeholder="Password">
             <font color="red"><?php 
                 if (isset($message)){
+                    echo "Invalid User ";
                     echo $message;
+                    echo " or Password";
                 }
                 ?>
             </font>

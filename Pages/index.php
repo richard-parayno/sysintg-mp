@@ -5,6 +5,11 @@
         <script src="http://www.google.com/jsapi" type="text/javascript"></script>
         <script src="../plugins/angular/angular.js"></script>
         <script src="../plugins/angular/sampleapp.js"></script>
+        <style>
+            .click a {
+            display: block;
+            }
+        </style>
     </head>
     <body ng-app="sampleapp" ng-controller="MainController" ng-init="
     <?php                            
@@ -87,8 +92,8 @@
         <div>
             <table id="univtable" class="display" border="2" cellspacing="0" width="100%" margin>
                 <thead>
-                    <th width="25%" ng-click="sortByLastName()">Last Name</th>
-                    <th width="25%" ng-click="sortByFirstName()">First Name</th>
+                    <th width="25%" ng-click="sortByLastName()" class="click"><a href="#">Last Name</a></th>
+                    <th width="25%" ng-click="sortByFirstName()" class="click"><a href="#">First Name</a></th>
                     <th width="13%">Birthday</th>
                     <th width="20%" ng-click="refreshAgeT()">
                         <label>Age Range: </label>
@@ -119,6 +124,7 @@
                     <th>University</th>
                 </tfoot>
             </table>
+            <br><br><a href="<?php echo $_SERVER['PHP_SELF']; ?>/../login.php">Logout</a>
         </div>
     </body>
 </html>
